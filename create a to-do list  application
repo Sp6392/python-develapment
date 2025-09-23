@@ -1,0 +1,87 @@
+# todo.py
+
+# Define the filename for storing tasks
+TASKS_FILE = "tasks.txt"
+
+def load_tasks():
+    """Reads tasks from the text file."""
+    try:
+        with open(TASKS_FILE, 'r') as file:
+            # Read each line and strip whitespace
+            tasks = [line.strip() for line in file.readlines()]
+    except FileNotFoundError:
+        # If the file doesn't exist, return an empty list
+        tasks = []
+    return tasks
+
+def save_tasks(tasks):
+    """Writes the current list of tasks to the text file."""
+    with open(TASKS_FILE, 'w') as file:
+        for task in tasks:
+            file.write(task + "
+")
+
+def view_tasks(tasks):
+    """Displays all tasks in the to-do list."""
+    print("
+--- Your To-Do List ---")
+    if not tasks:
+        print("Your to-do list is empty.")
+    else:
+        for i, task in enumerate(tasks, 1):
+            print(f"{i}. {task}")
+    print("-----------------------
+")
+
+def add_task(tasks):
+    """Adds a new task to the to-do list."""
+    task = input("Enter the new task: ")
+    tasks.append(task)
+    save_tasks(tasks)
+    print(f"Task '{task}' has been added.")
+
+def remove_task(tasks):
+    """Removes a task from the to-do list."""
+    view_tasks(tasks)
+    if not tasks:
+        return # No tasks to remove
+
+    try:
+        task_num = int(input("Enter the task number to remove: "))
+        if 1 <= task_num <= len(tasks):
+            removed_task = tasks.pop(task_num - 1)
+            save_tasks(tasks)
+            print(f"Task '{removed_task}' has been removed.")
+        else:
+            print("Invalid task number.")
+    except ValueError:
+        print("Invalid input. Please enter a number.")
+
+def main():
+    """Main function to run the to-do list application."""
+    tasks = load_tasks()
+    
+    while True:
+        print("
+To-Do List Manager")
+        print("1. View Tasks")
+        print("2. Add Task")
+        print("3. Remove Task")
+        print("4. Exit")
+        
+        choice = input("Choose an option (1-4): ")
+        
+        if choice == '1':
+            view_tasks(tasks)
+        elif choice == '2':
+            add_task(tasks)
+        elif choice == '3':
+            remove_task(tasks)
+        elif choice == '4':
+            print("Goodbye!")
+            break
+        else:
+            print("Invalid choice. Please enter a number between 1 and 4.")
+
+if _name_ == "_main_":
+    main()
